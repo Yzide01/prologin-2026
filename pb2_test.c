@@ -23,6 +23,14 @@ int trouve_ind_plus_proche(int robot, int* bornes, int* apres, int n, int t){
     return -1;
 }
 
+void affiche(int* tab){
+    printf("tab:");
+    for (int i=0; i<5; i++){
+        printf("%d",tab[i]);
+    }
+    printf("\n");
+}
+
 void verifier_classes(int n, int t, int* bornes, int* avant, int* apres) {
     /* TODO Afficher sur une ligne le nombre minimum de nouveaux robots et sur
     une seconde ligne le nombre de robots partis  */
@@ -44,9 +52,17 @@ void verifier_classes(int n, int t, int* bornes, int* avant, int* apres) {
                 apres[j] --;
                 taille_couplage_max ++;
                 n_apres++;
+
             }
+            
+            printf("avant:\n");
+            affiche(avant);
+            printf("apres:\n");
+            affiche(apres);
         }
     }
+    printf("apres: %d\n", n_apres);
+
     //dernier tour pour s'il reste des robots apres non couples, ce sont donc des robots arrives.
     for (int k =0; k<n; k++){
         n_apres = n_apres + apres[k];
@@ -54,6 +70,7 @@ void verifier_classes(int n, int t, int* bornes, int* avant, int* apres) {
 
     arriv = n_apres - taille_couplage_max;
     partis = n_avant - taille_couplage_max;
+    printf("couples: %d\n", taille_couplage_max);
     printf("%d\n", arriv);
     printf("%d\n", partis);
 
