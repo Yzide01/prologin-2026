@@ -40,6 +40,34 @@ void free_pile(pile* p){
     }
 }
 
+// Stocke les informations donnees par l'entree 'robots'
+void get_infos(char** robots, int n, char **prenoms, char** noms, char* types, int* seuils){
+    for (int i=0; i<n; i++){
+        int ind = 0;
+        prenoms[i] = malloc(17*sizeof(char));
+        int j = 0;
+        while (robots[i][ind] != ' '){
+            prenoms[i][j] = robots[i][ind];
+            ind++;
+            j++;
+        }
+        ind++;
+
+        j = 0;
+        while (robots[i][ind] != ' '){
+            noms[i][j] = robots[i][ind];
+            ind++;
+            j++;
+        }
+        ind++;
+
+        types[i] = robots[i][ind];
+
+        seuils[i] = robots[i][ind+2] - '0';  //conversion en entier 
+    }
+}
+
+
 // Ajoute les robots qui peuvent devenir notre ami le tour i dans la pile, l'enregistre dans le tableau des resultats
 bool ajoute_amis_pile(int n, pile* p, int* seuils){
     bool res = false;
@@ -50,7 +78,18 @@ bool ajoute_amis_pile(int n, pile* p, int* seuils){
             res = true;
         }
     }
-    return res //retourne true s'il y a eu un nouvel ami
+    return res; //retourne true s'il y a eu un nouvel ami
+}
+
+
+void free_robots(char** robots, int n, char** prenoms, char** noms, char* types, int* seuils){
+    for (int i = 0; i<n; i++){
+        free(robots[i]);
+        free(prenoms[i]);
+        free(noms[i]);
+    }
+    free(types);
+    free(seuils);
 }
 
 
@@ -62,21 +101,29 @@ void calcul_lien(int n, char** robots) {
     S'il est impossible de former un lien de confiance avec un robot, afficher
     `-1`.  */
 
-    int resultats = malloc(n*sizeof(int));
-    bool continuer = true;  
-    int ind = 0;
+    int* resultats = malloc(n*sizeof(int));
+
+    int* seuils = malloc(n*sizeof(int));
+    char* types = malloc(n*sizeof(char));
+    char** prenoms = malloc(n*sizeof(char*));
+    char** noms = malloc(n*sizeof(char*));
+
+    get_infos(robots, n, prenoms, noms, types, seuils);
+
+    int jour = 0;
+
+// A FAIRE: les fonctions utilitaires sont a peu pres terminees. manque plus qu'a faire la boucle principale
 
     //initialisation pile
-
-
-
-
-
-    while (ajoute_amis_pile()){
+    pile* p = creer_pile_vide();
+    while (ajoute_amis_pile(n,p,seuils)){
 
     }
 
 
+
+    free_robots(robots, n, prenoms, noms, types, seuils);
+    free(resultats);
 }
 
 int main() {
