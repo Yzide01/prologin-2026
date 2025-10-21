@@ -17,7 +17,7 @@ int trouve_ind_plus_proche(int robot, int* bornes, int* apres, int n, int t){
         }
     } 
     //si le robot couple se trouve dans le dernier intervalle
-    if ((apres[n-1] > 0) && (bornes[n-1] - t < bornes[robot + 1])){
+    if ((apres[n-1] > 0) && ((robot == n-1) || (bornes [n-1] - t < bornes[robot+1]))){
          return n-1;
     }
     return -1;
@@ -52,7 +52,7 @@ void verifier_classes(int n, int t, int* bornes, int* avant, int* apres) {
                 apres[j] --;
                 taille_couplage_max ++;
                 n_apres++;
-
+                printf("coucou");
             }
             
             printf("avant:\n");
