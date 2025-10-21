@@ -52,7 +52,7 @@ void get_infos(char** robots, int n, char **prenoms, char** noms, char* types, i
             ind++;
             j++;
         }
-        prenoms[i][j] = '\n';
+        prenoms[i][j] = '\0';
         ind++;
 
         j = 0;
@@ -61,12 +61,12 @@ void get_infos(char** robots, int n, char **prenoms, char** noms, char* types, i
             ind++;
             j++;
         }
-        noms[i][j] = '\n';
+        noms[i][j] = '\0';
         ind++;
 
         types[i] = robots[i][ind];
 
-        seuils[i] = robots[i][ind+2] - '0';  //conversion en entier 
+        seuils[i] = atoi(&robots[i][ind+2]);
     }
 }
 
@@ -128,8 +128,10 @@ void calcul_lien(int n, char** robots) {
         while (p){
             int ami = depile(&p);
             for (int i=0; i<n; i++){
-                if ((strcmp(prenoms[i],prenoms[ami]) == 0 && types[i] == 'P')||((strcmp(noms[i],noms[ami]) == 0 && types[i] == 'N'))){
-                    seuils[i] --;
+                if (seuils[i]>0){  
+                    if ((strcmp(prenoms[i],prenoms[ami]) == 0 && types[i] == 'P')||(strcmp(noms[i],noms[ami]) == 0 && types[i] == 'N')){
+                        seuils[i] --;
+                    }
                 }
             }
         }
@@ -143,6 +145,7 @@ void calcul_lien(int n, char** robots) {
 
     free_robots(robots, n, prenoms, noms, types, seuils);
     free(resultats);
+    free_pile(p);
 }
 
 int main() {

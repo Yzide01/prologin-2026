@@ -52,7 +52,7 @@ void get_infos(char** robots, int n, char **prenoms, char** noms, char* types, i
             ind++;
             j++;
         }
-        prenoms[i][j] = '\n';
+        prenoms[i][j] = '\0';
         ind++;
 
         j = 0;
@@ -61,12 +61,19 @@ void get_infos(char** robots, int n, char **prenoms, char** noms, char* types, i
             ind++;
             j++;
         }
-        noms[i][j] = '\n';
+        noms[i][j] = '\0';
         ind++;
 
         types[i] = robots[i][ind];
 
-        seuils[i] = robots[i][ind+2] - '0';  //conversion en entier 
+        seuils[i] = atoi(&robots[i][ind+2]);
+
+
+        printf("infos pris: \n");
+
+        for (int i = 0; i <n; i++){
+            printf("Robot %d: %s %s %c %d\n", i, prenoms[i], noms[i], types[i], seuils[i]);
+        }
     }
 }
 
@@ -75,7 +82,6 @@ void get_infos(char** robots, int n, char **prenoms, char** noms, char* types, i
 bool ajoute_amis_pile(int n, pile** ptr_p, int* seuils, int* resultats, int jour){
     bool res = false;
     for (int i = 0; i<n; i++){
-        printf("seuil %d: %d\n",i,seuils[i]);
         if (seuils[i] == 0){
             *ptr_p = empile(*(ptr_p),i);
             seuils[i] --; //pour que l'on ne l'empile pas encore dans le futur
@@ -128,25 +134,23 @@ void calcul_lien(int n, char** robots) {
         //on depile toute la pile, on prend en compte les amis pour reduire les seuils ("propagation")
         while (p){
             int ami = depile(&p);
-
-            printf("%d\n",ami);
             for (int i=0; i<n; i++){
-                if ((strcmp(prenoms[i],prenoms[ami]) == 0 && types[i] == 'P')||((strcmp(noms[i],noms[ami]) == 0 && types[i] == 'N'))){
+                if ((strcmp(prenoms[i],prenoms[ami]) == 0 && types[ami] == 'P')||(strcmp(noms[i],noms[ami]) == 0 && types[ami] == 'N')){
                     seuils[i] --;
                 }
             }
         }
         jour++;
-        printf("%d\n", jour);
     }
 
     for (int i=0; i<n-1; i++){
-        printf("%d\n",resultats[i]);
+        printf("%d ",resultats[i]);
     }
     printf("%d\n", resultats[n-1]);
 
     free_robots(robots, n, prenoms, noms, types, seuils);
     free(resultats);
+    free_pile(p);
 }
 
 int main() {
